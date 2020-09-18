@@ -1,0 +1,75 @@
+// this is tutorial for webapi
+
+namespace DemoLibrary
+{
+	public static class ApiHelper
+        {
+             public static HttpClient.ApiClient {get; set; };
+             public static void InitializeClient()
+	     {
+                     ApiClient = new HttpClient();
+                     ApiClient.BaseAddress = new Uri("the address");
+                     ApiClient.DefaultRequestHeaders.Accept.Clear();
+                     ApiClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                     
+	     }
+        }
+
+}
+
+
+
+namespace TheApp
+{
+	public partial class MainWindow : Window
+	{
+		public MainWindow()
+		{
+			InitializeComponent();
+			ApiHelper.InitializeClient();
+
+		}
+	}
+
+}
+
+
+namespace DemoLibrary
+{
+	public class ComicProcessor
+	{
+		public async Task LoadAppSettingFromJson()
+		{
+			string url = "http://xyz";
+			
+		}
+		
+		using (HttpResponseMessage response await ApiHelper.ApiClient.GetAsync(url))
+		{
+			if(response.IsSuccessStatusCode)
+			{
+				AppSetting appsetting = await response.Content.ReadAsAync<AppSetting>();
+          			return appsetting;
+			}
+			else 
+			{
+				throw new Exception(response.ReasonPhrase);
+			}
+		}
+	}
+	
+}
+
+namespace DemoLibrary
+{
+	public class AppSetting
+	{
+                // must match them in the json file
+		public string Env {get; set; }
+		public string Key {get; set; }
+		public string Value {get; set; }
+	}
+
+
+}
